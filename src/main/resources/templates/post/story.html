@@ -13,8 +13,22 @@
 </head>
 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
 
+<main class="main" layout:fragment="content">
+    <section class="container">
+        <!--전체 리스트 시작-->
+        <article class="story-list" id="storyList">
+
+            <!--스토리 아이템-->
+
+            <!--스토리 아이템 끝-->
+
+
+        </article>
+    </section>
+</main>
 
 <th:block layout:fragment="script">
+    <script th:src="@{/js/story.js}"></script>
     <script th:inline="javascript"></script>
 </th:block>
 
