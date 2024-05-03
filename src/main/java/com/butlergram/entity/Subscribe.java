@@ -25,9 +25,9 @@ public class Subscribe {
 
     @JoinColumn(name = "from_user_id")
     @ManyToOne
-    private User fromUser;
+    private Users fromUser;
 
     @JoinColumn(name = "to_user_id")
     @ManyToOne
-    private User toUser;
+    private Users toUser;
 }

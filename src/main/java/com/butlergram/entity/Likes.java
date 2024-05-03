@@ -1,12 +1,9 @@
 package com.butlergram.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.awt.*;
 
 @Entity
 @Table(
@@ -35,5 +32,5 @@ public class Likes extends BaseEntity {
     //@JsonIgnoreProperties({"images"}) // Postman으로 확인시 -> user의 likes의 images가 무한참조 확인됨.
     @JoinColumn(name = "user_id")
     @ManyToOne
-    private User user;
+    private Users user;
 }

@@ -1,12 +1,9 @@
 package com.butlergram.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.awt.*;
 
 @Entity
 @Table(name = "comment")
@@ -24,7 +21,7 @@ public class Comment extends BaseEntity {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
+    private Users user;
 
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.EAGER)

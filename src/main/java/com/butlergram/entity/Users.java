@@ -1,12 +1,12 @@
 package com.butlergram.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.butlergram.dto.UserFormDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.awt.*;
 import java.util.List;
 
 @Entity
@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class User extends BaseEntity {
+public class Users extends BaseEntity {
 
     @Id
     @Column(name = "user_id")
@@ -31,7 +31,7 @@ public class User extends BaseEntity {
     private String email; //이메일
 
     @Column(nullable = false, length = 100)
-    private String name; //성명
+    private String name; //이름
 
     private String profileImgUrl; //프로필사진
 
@@ -47,4 +47,19 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Post> posts;
+
+    //UserFormDto -> User 엔티티 객체로 변환
+    public static Users createUser(UserFormDto userFormDto, PasswordEncoder passwordEncoder) {
+
+        String password = passwordEncoder.encode(userFormDto.getPassword());
+
+        Users user = new Users();
+
+        user.setUserName(userFormDto.getUserName());
+        user.setEmail(userFormDto.getEmail());
+        user.setName(userFormDto.getName());
+        user.setPassword(password);
+
+        return user;
+    }
 }

@@ -24,7 +24,7 @@ public class Post extends BaseEntity {
 
     @JoinColumn(name="user_id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private User user;
+    private Users user;
 
     @OneToMany(mappedBy = "post")
     private List<Likes> likes;
