@@ -13,8 +13,99 @@
 </head>
 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
 
+<!--프로필셋팅 메인-->
+<main class="main" layout:fragment="content">
+    <!--프로필셋팅 섹션-->
+    <section class="setting-container">
+        <!--프로필셋팅 아티클-->
+        <article class="setting__content">
+
+            <!--프로필셋팅 아이디영역-->
+            <div class="content-item__01">
+                <div class="item__img">
+                    <img src="#" />
+                </div>
+                <div class="item__username">
+                    <h2></h2>
+                </div>
+            </div>
+            <!--프로필셋팅 아이디영역 end-->
+
+            <!--프로필 수정-->
+            <form id="profileUpdate">
+                <div class="content-item__02">
+                    <div class="item__title">이름</div>
+                    <div class="item__input">
+                        <input type="text" name="name" placeholder="이름" required="required"/>
+                    </div>
+                </div>
+                <div class="content-item__03">
+                    <div class="item__title">유저네임</div>
+                    <div class="item__input">
+                        <input type="text" name="userName" placeholder="유저네임" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="content-item__04">
+                    <div class="item__title">패스워드</div>
+                    <div class="item__input">
+                        <input type="password" name="password" placeholder="패스워드" required="required"/>
+                    </div>
+                </div>
+                <!-- <div class="content-item__05">
+                    <div class="item__title">웹사이트</div>
+                    <div class="item__input">
+                        <input type="text" name="website" placeholder="웹 사이트" />
+                    </div>
+                </div> -->
+                <div class="content-item__06">
+                    <div class="item__title">소개</div>
+                    <div class="item__input">
+                        <textarea name="bio" id="" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="content-item__07">
+                    <div class="item__title"></div>
+                    <div class="item__input">
+                        <span><b>개인정보</b></span> <span>공개 프로필에는 포함되지 않습니다.</span>
+                    </div>
+                </div>
+                <div class="content-item__08">
+                    <div class="item__title">이메일</div>
+                    <div class="item__input">
+                        <input type="text" name="email" placeholder="이메일" readonly="readonly"/>
+                    </div>
+                </div>
+                <div class="content-item__09">
+                    <div class="item__title">전화번호</div>
+                    <div class="item__input">
+                        <input type="text" name="phone" placeholder="전화번호" />
+                    </div>
+                </div>
+                <div class="content-item__10">
+                    <div class="item__title">성별</div>
+                    <div class="item__input">
+                        <input type="text" name="gender" />
+                    </div>
+                </div>
+
+                <!--제출버튼-->
+                <div class="content-item__11">
+                    <div class="item__title"></div>
+                    <div class="item__input">
+                        <button>등록</button>
+                    </div>
+                </div>
+                <!--제출버튼 end-->
+
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            </form>
+            <!--프로필수정 form end-->
+        </article>
+    </section>
+</main>
 
 <th:block layout:fragment="script">
+    <script th:src="@{/js/update.js}"></script>
     <script th:inline="javascript"></script>
 </th:block>
 

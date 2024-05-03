@@ -37,6 +37,7 @@
 
                         <input type="text" name="name" placeholder="이름" th:field="*{name}" />
                         <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect Data</p>
+
                         <button>가입</button>
 
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
