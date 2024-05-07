@@ -21,9 +21,7 @@ public class Likes extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
-    private int likeCount;
+    private Long id;
 
     @JoinColumn(name = "image_id")
     @ManyToOne

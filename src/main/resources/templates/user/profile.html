@@ -7,11 +7,10 @@
     <style></style>
 </th:block>
 
-<!-- <head>
+<head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
-<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
 
 <!--프로필 섹션-->
 <section class="profile" layout:fragment="content">
@@ -26,9 +25,12 @@
                 <form id="userProfileImageForm">
                     <input type="file" name="profileImgFile" style="display: none;"
                            id="userProfileImageInput" />
+
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
 
-                <img class="profile-image" src="#" id="userProfileImage" />
+                <img class="profile-image" th:src="@{/upload/${userProfileDto.users.profileImageUrl}}"
+                     onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
             </div>
         </div>
         <!--유저이미지 end-->
@@ -37,22 +39,15 @@
         <div class="profile-right">
             <div class="name-group">
                 <h2></h2>
-                <!--
-                <c:choose>
-                    <c:when test="${dto.pageOwnerState}">
-                        <button class="cta" onclick="location.href='/image/upload'">사진등록</button>
-                    </c:when>
-                    <c:otherwise>
-                        <c:choose>
-                            <c:when test="${dto.subscribeState}">
-                                <button class="cta blue" onclick="toggleSubscribe(${dto.user.id}, this)">구독취소</button>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="cta" onclick="toggleSubscribe(${dto.user.id}, this)">구독하기</button>
-                            </c:otherwise>
-                        </c:choose>
-                    </c:otherwise>
-                </c:choose> -->
+                <th:block th:switch="${userProfileDto.pageOwnerState}">
+                    <button th:case="true" class="cta" onclick="location.href='/image/upload'">사진등록</button>
+                    <th:block th:case="false">
+                        <th:block th:switch="${userProfileDto.subscribeState}">
+                            <button th:case="true" class="cta blue" th:onclick="'toggleSubscribe(' + ${userProfileDto.users.id} + ', this)'">구독취소</button>
+                            <button th:case="*" class="cta" th:onclick="'toggleSubscribe(' + ${userProfileDto.users.id} + ', this)'">구독하기</button>
+                        </th:block>
+                    </th:block>
+                </th:block>
 
                 <button class="modi" onclick="popup('.modal-info')">
                     <i class="fas fa-cog"></i>
@@ -61,15 +56,14 @@
 
             <div class="subscribe">
                 <ul>
-                    <li><a href=""> 게시물<span>${dto.imageCount}</span>
+                    <li><a href="#">게시물<span th:text="${userProfileDto.imageCount}"></span>
                     </a></li>
-                    <li><a href="javascript:subscribeInfoModalOpen();"> 구독정보<span></span>
+                    <li><a href="javascript:subscribeInfoModalOpen(${userProfileDto.users.id});">구독정보<span th:text="${userProfileDto.subscribeCount}"></span>
                     </a></li>
                 </ul>
             </div>
             <div class="state">
-                <h4></h4>
-                <h4></h4>
+                <h4 th:text="${userProfileDto.users.bio}"></h4>
             </div>
         </div>
         <!--유저정보 및 사진등록 구독하기 end-->
@@ -85,18 +79,17 @@
             <!--게시물컨 그리드배열-->
             <div class="tab-1-content-inner">
 
-                <!--아이템들
-                <c:forEach var="image" items="${dto.user.images}">
+                <th:block th:each="post : ${userProfileDto.users.posts}">
                     <div class="img-box">
-                        <a href=""> <img src="/upload/${image.postImageUrl}" />
+                        <a href="#">
+                            <img th:src="'/upload/' + ${post.postImageUrl}" />
                         </a>
                         <div class="comment">
-                            <a href="#" class=""> <i class="fas fa-heart"></i><span>${image.likeCount}</span>
+                            <a href="#" class=""> <i class="fas fa-heart"></i><span th:text="${post.likeCount}"></span>
                             </a>
                         </div>
                     </div>
-                </c:forEach>
-                아이템들 end-->
+                </th:block>
             </div>
         </div>
     </div>
@@ -105,8 +98,7 @@
 <!--로그아웃, 회원정보변경 모달-->
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
-        <button>회원정보 <!-- onclick="location.href='/user/${principal.user.id}/update'" -->
-            변경</button>
+        <button onclick="location.href='/user/${principal.users.id}/update'">회원정보 변경</button>
         <button onclick="location.href='/logout'">로그아웃</button>
         <button onclick="closePopup('.modal-info')">취소</button>
     </div>
@@ -117,7 +109,7 @@
 <div class="modal-image" onclick="modalImage()">
     <div class="modal">
         <p>프로필 사진 바꾸기</p>
-        <button >사진 업로드</button> <!-- onclick="profileImageUpload(${dto.user.id}, ${principal.user.id})" -->
+        <button onclick="profileImageUpload(${userProfileDto.users.id}, ${principal.users.id})">사진 업로드</button>
         <button onclick="closePopup('.modal-image')">취소</button>
     </div>
 </div>

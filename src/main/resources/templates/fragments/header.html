@@ -14,7 +14,7 @@
                 <li class="navi-item"><a href="/post/popular">
                     <i class="far fa-compass"></i>
                 </a></li>
-                <li class="navi-item"><a href="#">
+                <li sec:authorize="isAuthenticated()" class="navi-item"><a th:href="'/user/' + ${#authentication.principal.id} +'/profile'">
                     <i class="far fa-user"></i>
                 </a></li>
             </ul>

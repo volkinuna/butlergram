@@ -33,7 +33,7 @@ public class Users extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name; //이름
 
-    private String profileImgUrl; //프로필사진
+    private String profileImageUrl; //프로필사진
 
     @Lob
     @Column(columnDefinition = "longtext")

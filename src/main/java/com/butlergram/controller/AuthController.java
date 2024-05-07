@@ -19,7 +19,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
 
-
     //로그인 화면
     @GetMapping(value = "/user/login") //localhost/user/login
     public String loginUser() {

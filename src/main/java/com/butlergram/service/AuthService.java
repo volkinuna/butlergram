@@ -1,14 +1,21 @@
 package com.butlergram.service;
 
+import com.butlergram.config.UserContext;
 import com.butlergram.entity.Users;
 import com.butlergram.repository.AuthRepository;
+import com.butlergram.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -32,18 +39,32 @@ public class AuthService implements UserDetailsService {
         }
     }
 
+//    @Override
+//    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+//
+//        Users user = authRepository.findByUserName(userName);
+//
+//        if (user == null) {
+//            throw new UsernameNotFoundException(userName);
+//        }
+//
+//        return User.builder()
+//                .username(user.getUserName())
+//                .password(user.getPassword())
+//                .build();
+//    }
+
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
-        Users user = authRepository.findByUserName(userName);
+        Users users = authRepository.findByUserName(userName);
 
-        if (user == null) {
+        if (users == null) { //사용자가 없다면
             throw new UsernameNotFoundException(userName);
         }
 
-        return User.builder()
-                .username(user.getUserName())
-                .password(user.getPassword())
-                .build();
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        return new UserContext(users, authorities);
     }
 }

@@ -18,7 +18,7 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imgUrl; //사진
+    private String postImageUrl; //사진
 
     private String caption; //설명글
 
@@ -31,4 +31,10 @@ public class Post extends BaseEntity {
 
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
+
+    @Transient
+    private boolean LikeState;
+
+    @Transient
+    private int likeCount;
 }
