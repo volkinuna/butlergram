@@ -95,4 +95,26 @@ public class UserService {
 
         return userEntity;
     }
+
+    //회원프로필 사진변경
+    @Transactional
+    public Users profileImageUrlUpdate(Long principalId, MultipartFile profileImageFile) {
+        UUID uuid = UUID.randomUUID();
+
+        String imageFileName = uuid+"_"+profileImageFile.getOriginalFilename();
+
+        Path imageFilePath = Paths.get(imgLocation+imageFileName);
+
+        try {
+            Files.write(imageFilePath, profileImageFile.getBytes());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Users userEntity = userRepository.findById(principalId).orElseThrow(EntityNotFoundException::new);
+
+        userEntity.setProfileImageUrl(imageFileName);
+
+        return userEntity;
+    }
 }
