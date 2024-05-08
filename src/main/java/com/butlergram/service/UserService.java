@@ -49,9 +49,9 @@ public class UserService {
         return userEntity;
     }
 
-    //유저 아이디(userName)를 통해 유저 객체 받아오기
-    public Users findByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+    //유저 아이디(username)를 통해 유저 객체 받아오기
+    public Users findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     @Transactional(readOnly = true)

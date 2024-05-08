@@ -12,7 +12,7 @@ import org.hibernate.validator.constraints.Length;
 public class UserFormDto {
 
     @NotBlank(message = "유저네임은 필수 입력값입니다.")
-    private String userName; //유저네임
+    private String username; //유저네임
 
     @NotEmpty(message = "비밀번호는 필수 입력값입니다.")
     @Length(min = 8, max = 16, message = "비밀번호는 8~16자 사이로 입력해 주세요.")

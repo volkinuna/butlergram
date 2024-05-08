@@ -26,8 +26,8 @@
 
                     <!--회원가입 인풋-->
                     <form class="login__input" action="/user/new" method="post" th:object="${userFormDto}">
-                        <input type="text" name="userName" placeholder="유저네임" maxlength="30" th:field="*{userName}" />
-                        <p th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}" class="fieldError">Incorrect Data</p>
+                        <input type="text" name="username" placeholder="유저네임" maxlength="30" th:field="*{username}" />
+                        <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError">Incorrect Data</p>
 
                         <input type="password" name="password" placeholder="패스워드" th:field="*{password}" />
                         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect Data</p>

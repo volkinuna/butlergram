@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .formLogin(formLogin -> formLogin
                         .loginPage("/user/login")
                         .defaultSuccessUrl("/")
-                        .usernameParameter("userName")
+                        .usernameParameter("username")
                         .failureUrl("/user/login/error")
                 )
                 //3. 로그아웃에 관한 설정

@@ -16,7 +16,7 @@ public class UserContext extends User {
     private final String name;
 
     public UserContext(Users users, List<GrantedAuthority> authorities) {
-        super(users.getUserName(), users.getPassword(), authorities); //User 생성자 실행
+        super(users.getUsername(), users.getPassword(), authorities); //User 생성자 실행
         this.id = users.getId();
         this.email = users.getEmail();
         this.name = users.getName();

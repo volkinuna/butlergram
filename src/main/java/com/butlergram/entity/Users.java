@@ -22,7 +22,7 @@ public class Users extends BaseEntity {
     private Long id;
 
     @Column(unique = true, length = 100)
-    private String userName; //유저네임
+    private String username; //유저네임
 
     @Column(nullable = false)
     private String password; //비밀번호
@@ -55,7 +55,7 @@ public class Users extends BaseEntity {
 
         Users user = new Users();
 
-        user.setUserName(userFormDto.getUserName());
+        user.setUsername(userFormDto.getUsername());
         user.setEmail(userFormDto.getEmail());
         user.setName(userFormDto.getName());
         user.setPassword(password);

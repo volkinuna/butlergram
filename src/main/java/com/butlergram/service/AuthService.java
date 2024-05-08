@@ -32,7 +32,7 @@ public class AuthService implements UserDetailsService {
 
     //회원 중복체크
     private void validateDuplicateUser(Users user) {
-        Users findUser = authRepository.findByUserName(user.getUserName());
+        Users findUser = authRepository.findByUsername(user.getUsername());
 
         if (findUser != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
@@ -42,25 +42,25 @@ public class AuthService implements UserDetailsService {
 //    @Override
 //    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 //
-//        Users user = authRepository.findByUserName(userName);
+//        Users user = authRepository.findByUsername(username);
 //
 //        if (user == null) {
-//            throw new UsernameNotFoundException(userName);
+//            throw new UsernameNotFoundException(username);
 //        }
 //
 //        return User.builder()
-//                .username(user.getUserName())
+//                .username(user.getUsername())
 //                .password(user.getPassword())
 //                .build();
 //    }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Users users = authRepository.findByUserName(userName);
+        Users users = authRepository.findByUsername(username);
 
         if (users == null) { //사용자가 없다면
-            throw new UsernameNotFoundException(userName);
+            throw new UsernameNotFoundException(username);
         }
 
         List<GrantedAuthority> authorities = new ArrayList<>();

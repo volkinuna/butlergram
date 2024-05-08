@@ -31,7 +31,7 @@ public class UserController {
 
     @GetMapping("/user/{userId}/profile")
     public String profile(@PathVariable(value = "userId") Long userId, Model model, Principal principal) {
-        UserProfileDto userProfileDto = userService.profile(userId, userService.findByUserName(principal.getName()).getId());
+        UserProfileDto userProfileDto = userService.profile(userId, userService.findByUsername(principal.getName()).getId());
         model.addAttribute("userProfileDto", userProfileDto);
         return "user/profile";
     }
