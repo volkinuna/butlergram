@@ -12,8 +12,9 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
+<div layout:fragment="content">
 <!--프로필 섹션-->
-<section class="profile" layout:fragment="content">
+<section class="profile">
     <!--유저정보 컨테이너-->
     <div class="profileContainer">
 
@@ -29,8 +30,8 @@
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
 
-                <img class="profile-image" th:src="@{/upload/${userProfileDto.users.profileImageUrl}}"
-                     onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
+                <img class="profile-image" th:src="${userProfileDto.users.profileImageUrl == null} ? '/images/person.jpeg' : '/upload/' + ${userProfileDto.users.profileImageUrl}"
+                     th:onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
             </div>
         </div>
         <!--유저이미지 end-->
@@ -38,7 +39,7 @@
         <!--유저정보 및 사진등록 구독하기-->
         <div class="profile-right">
             <div class="name-group">
-                <h2></h2>
+                <h2 th:text="${userProfileDto.users.name}"></h2>
                 <th:block th:switch="${userProfileDto.pageOwnerState}">
                     <button th:case="true" class="cta" onclick="location.href='/image/upload'">사진등록</button>
                     <th:block th:case="false">
@@ -99,7 +100,7 @@
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
         <button onclick="location.href='/user/${principal.users.id}/update'">회원정보 변경</button>
-        <button onclick="location.href='/logout'">로그아웃</button>
+        <button onclick="location.href='/user/logout'">로그아웃</button>
         <button onclick="closePopup('.modal-info')">취소</button>
     </div>
 </div>
@@ -109,7 +110,7 @@
 <div class="modal-image" onclick="modalImage()">
     <div class="modal">
         <p>프로필 사진 바꾸기</p>
-        <button onclick="profileImageUpload(${userProfileDto.users.id}, ${principal.users.id})">사진 업로드</button>
+        <button th:onclick="'profileImageUpload(' + ${userProfileDto.users.id} + ', ' + ${#authentication.principal.id} + ')'">사진 업로드</button>
         <button onclick="closePopup('.modal-image')">취소</button>
     </div>
 </div>
@@ -127,6 +128,7 @@
         <div class="subscribe-list" id="subscribeModalList">
         </div>
     </div>
+</div>
 
 </div>
 

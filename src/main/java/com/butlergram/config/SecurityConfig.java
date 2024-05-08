@@ -37,8 +37,8 @@ public class SecurityConfig {
                 )
                 //3. 로그아웃에 관한 설정
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
-                        .logoutSuccessUrl("/")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
+                        .logoutSuccessUrl("/user/login")
                 )
                 //4. 인증되지 않은 사용자가 리소스에 접근시 설정
                 .exceptionHandling(handling -> handling
