@@ -3,6 +3,7 @@ package com.butlergram.controller;
 import com.butlergram.dto.CMRespDto;
 import com.butlergram.dto.SubscribeDto;
 import com.butlergram.dto.UserProfileDto;
+import com.butlergram.dto.UserUpdateDto;
 import com.butlergram.entity.Users;
 import com.butlergram.service.AuthService;
 import com.butlergram.service.SubscribeService;
@@ -49,24 +50,20 @@ public class UserController {
 //        return new ResponseEntity<>(new CMRespDto<>(1, "프로필사진 변경완료", null), HttpStatus.OK);
 //    }
 
-//    @GetMapping("/user/{userId}/subscribe")
-//    public ResponseEntity<?> subscribeList(@PathVariable("userId") Long userId, Principal principal){
-//
-//        List<SubscribeDto> subscribeDto = subscribeService.구독리스트(principalDetails.getUser().getId(), pageUserId);
-//
-//        return new ResponseEntity<>(new CMRespDto<>(1, "구독자 정보 리스트를 불러오기 성공", subscribeDto), HttpStatus.OK);
-//    }
+    @GetMapping("/user/{userId}/subscribe")
+    public ResponseEntity<?> subscribeList(@PathVariable("userId") Long userId, Principal principal){
+
+        List<SubscribeDto> subscribeDto = subscribeService.subscribeList(userService.findByUsername(principal.getName()).getId(), userId);
+
+        return new ResponseEntity<>(new CMRespDto<>(1, "구독자 정보 리스트를 불러오기 성공", subscribeDto), HttpStatus.OK);
+    }
 
 
 //    @PutMapping("/user/{id}")
-//    public CMRespDto<?> update(
-//            @PathVariable int id,
-//            @Valid UserUpdateDto userUpdateDto,
-//            BindingResult bindingResult, // BindingResult bingingResult는 꼭! @Valid가 젹혀있는 다름 파라메터에 적어야됨!!
-//            @AuthenticationPrincipal PrincipalDetails principalDetails) { // @AuthenticationPrincipal PrincipalDetails principalDetails <- 세션 정보에 접근하는 방법이었음.
-//
-//        User userEntity =  userService.회원수정(id, userUpdateDto.toEntity()); // User 오브젝트를 보낸다.
+//    public CMRespDto<?> update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
+//            BindingResult bindingResult, Principal principal) {
+//        Users userEntity =  userService.update(id, userUpdateDto.toEntity()); // User 오브젝트를 보낸다.
 //        principalDetails.setUser(userEntity); // 세션 정보 변경
-//        return new CMRespDto<>(1, "회원수정완료", userEntity); // 응답시에 userEntity의 모든 getter 함수가 호출되고 JSON으로 파싱하여 응답한다.
+//        return new CMRespDto<>(1, "회원수정완료", userEntity);
 //    }
 }

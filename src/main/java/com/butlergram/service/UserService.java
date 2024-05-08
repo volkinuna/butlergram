@@ -29,6 +29,7 @@ public class UserService {
     @Value("${imgLocation}")
     private String imgLocation;
 
+    //회원 프로필사진 변경
     @Transactional
     public Users profileImageUpdate(Long principalId, MultipartFile profileImageFile) {
         UUID uuid = UUID.randomUUID();
@@ -54,6 +55,7 @@ public class UserService {
         return userRepository.findByUsername(username);
     }
 
+    //회원 프로필
     @Transactional(readOnly = true)
     public UserProfileDto profile(Long userId, Long principalId) {
         UserProfileDto userProfileDto = new UserProfileDto();
@@ -78,6 +80,7 @@ public class UserService {
         return userProfileDto;
     }
 
+    //회원 수정
     @Transactional
     public Users update(Long id, Users users) {
 
@@ -92,28 +95,6 @@ public class UserService {
         userEntity.setBio(users.getBio());
         userEntity.setPhone(users.getPhone());
         userEntity.setGender(users.getGender());
-
-        return userEntity;
-    }
-
-    //회원프로필 사진변경
-    @Transactional
-    public Users profileImageUrlUpdate(Long principalId, MultipartFile profileImageFile) {
-        UUID uuid = UUID.randomUUID();
-
-        String imageFileName = uuid+"_"+profileImageFile.getOriginalFilename();
-
-        Path imageFilePath = Paths.get(imgLocation+imageFileName);
-
-        try {
-            Files.write(imageFilePath, profileImageFile.getBytes());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Users userEntity = userRepository.findById(principalId).orElseThrow(EntityNotFoundException::new);
-
-        userEntity.setProfileImageUrl(imageFileName);
 
         return userEntity;
     }

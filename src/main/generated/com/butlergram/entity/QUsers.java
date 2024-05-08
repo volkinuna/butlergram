@@ -54,7 +54,7 @@ public class QUsers extends EntityPathBase<Users> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
-    public final StringPath userName = createString("userName");
+    public final StringPath username = createString("username");
 
     public QUsers(String variable) {
         super(Users.class, forVariable(variable));
