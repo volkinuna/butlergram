@@ -141,7 +141,7 @@ function profileImageUpload(userId, principalId) {
 		let formData = new FormData(profileImageForm);
 
 		$.ajax({
-			url: "/user/" + principalId + "profileImageUrl",
+			url: "/user/" + principalId + "/profileImageUrl",
 			type: "PUT", // 수정할꺼니깐../ user 모델에 있는 profileImageUrl을..
 			data: formData,
 			contentType: false, // 필수 : x-www-form-urlencoded로 파싱되는 것을 방지/ x-www-form-urlencoded로 되어있으면 사진 전송 불가

@@ -41,7 +41,8 @@ public class UserUpdateDto {
 
     private static ModelMapper modelMapper = new ModelMapper();
 
-    public static UserUpdateDto of(Users users) {
-        return modelMapper.map(users, UserUpdateDto.class);
+    //dto -> entity
+    public Users createUser() {
+        return modelMapper.map(this, Users.class);
     }
 }

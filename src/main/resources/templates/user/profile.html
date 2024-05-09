@@ -24,14 +24,14 @@
                  onclick="popup('.modal-image')">
 
                 <form id="userProfileImageForm">
-                    <input type="file" name="profileImgFile" style="display: none;"
+                    <input type="file" name="profileImageFile" style="display: none;"
                            id="userProfileImageInput" />
 
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 </form>
 
-                <img class="profile-image" th:src="${userProfileDto.users.profileImageUrl == null} ? '/images/person.jpeg' : '/upload/' + ${userProfileDto.users.profileImageUrl}"
-                     th:onerror="this.src='/images/person.jpeg'" id="userProfileImage" />
+                <img class="profile-image" th:src="${#strings.isEmpty(userProfileDto.users.profileImageUrl) ? '/images/person.jpeg' : '/upload/' + userProfileDto.users.profileImageUrl}"
+                     id="userProfileImage" />
             </div>
         </div>
         <!--유저이미지 end-->

@@ -30,7 +30,7 @@ public class UserController {
     private final UserService userService;
     private final SubscribeService subscribeService;
 
-    @GetMapping("/user/{userId}/profile")
+    @GetMapping("/user/{userId}")
     public String profile(@PathVariable(value = "userId") Long userId, Model model, Principal principal) {
         UserProfileDto userProfileDto = userService.profile(userId, userService.findByUsername(principal.getName()).getId());
         model.addAttribute("userProfileDto", userProfileDto);
@@ -42,13 +42,13 @@ public class UserController {
         return "user/update";
     }
 
-//    @PutMapping("/user/{principalId}/profileImageUrl")
-//    public ResponseEntity<?> profileImageUrlUpdate(@PathVariable("principalId") Long principalId, MultipartFile profileImageFile,
-//                                                   Principal principal){
-//        Users userEntity = userService.profileImageUrlUpdate(principalId, profileImageFile);
-//        principal.setUser(userEntity); // 세션 변경
-//        return new ResponseEntity<>(new CMRespDto<>(1, "프로필사진 변경완료", null), HttpStatus.OK);
-//    }
+    @PutMapping("/user/{principalId}/profileImageUrl")
+    public ResponseEntity<?> profileImageUrlUpdate(@PathVariable("principalId") Long principalId, MultipartFile profileImageFile,
+                                                   Principal principal){
+        Users userEntity = userService.profileImageUpdate(principalId, profileImageFile);
+        //principal.setUser(userEntity); // 세션 변경
+        return new ResponseEntity<>(new CMRespDto<>(1, "프로필사진 변경완료", null), HttpStatus.OK);
+    }
 
     @GetMapping("/user/{userId}/subscribe")
     public ResponseEntity<?> subscribeList(@PathVariable("userId") Long userId, Principal principal){
@@ -59,11 +59,11 @@ public class UserController {
     }
 
 
-//    @PutMapping("/user/{id}")
-//    public CMRespDto<?> update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
-//            BindingResult bindingResult, Principal principal) {
-//        Users userEntity =  userService.update(id, userUpdateDto.toEntity()); // User 오브젝트를 보낸다.
-//        principalDetails.setUser(userEntity); // 세션 정보 변경
-//        return new CMRespDto<>(1, "회원수정완료", userEntity);
-//    }
+    @PutMapping("/user/{id}")
+    public CMRespDto<?> update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
+            BindingResult bindingResult, Principal principal) {
+        Users userEntity =  userService.update(id, userUpdateDto.createUser());
+        //principalDetails.setUser(userEntity); // 세션 정보 변경
+        return new CMRespDto<>(1, "회원수정완료", userEntity);
+    }
 }
