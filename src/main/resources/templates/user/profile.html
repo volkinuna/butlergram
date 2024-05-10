@@ -96,10 +96,10 @@
     </div>
 </section>
 
-<!--로그아웃, 회원정보변경 모달-->
+<!--로그아웃, 회원정보변경 모달 th:href="'/user/' + ${#authentication.principal.id}"-->
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
-        <button onclick="location.href='/user/${principal.users.id}/update'">회원정보 변경</button>
+        <button onclick="location.href='/user/' + ${#authentication.principal.id} + '/update'">회원정보 변경</button>
         <button onclick="location.href='/user/logout'">로그아웃</button>
         <button onclick="closePopup('.modal-info')">취소</button>
     </div>
