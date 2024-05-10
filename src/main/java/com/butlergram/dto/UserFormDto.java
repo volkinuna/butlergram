@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.security.core.userdetails.User;
 
 @Getter
 @Setter
@@ -24,4 +25,5 @@ public class UserFormDto {
 
     @NotEmpty(message = "이름은 필수 입력값입니다.")
     private String name; //이름
+
 }

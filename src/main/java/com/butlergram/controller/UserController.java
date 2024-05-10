@@ -37,11 +37,6 @@ public class UserController {
         return "user/profile";
     }
 
-    @GetMapping("/user/{id}/update")
-    public String update(@PathVariable("id") Long id, Principal principal) {
-        return "user/update";
-    }
-
     @PutMapping("/user/{principalId}/profileImageUrl")
     public ResponseEntity<?> profileImageUrlUpdate(@PathVariable("principalId") Long principalId, MultipartFile profileImageFile,
                                                    Principal principal){
@@ -56,6 +51,11 @@ public class UserController {
         List<SubscribeDto> subscribeDto = subscribeService.subscribeList(userService.findByUsername(principal.getName()).getId(), userId);
 
         return new ResponseEntity<>(new CMRespDto<>(1, "구독자 정보 리스트를 불러오기 성공", subscribeDto), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{id}/update")
+    public String update(@PathVariable("id") Long id, Principal principal) {
+        return "user/update";
     }
 
 
