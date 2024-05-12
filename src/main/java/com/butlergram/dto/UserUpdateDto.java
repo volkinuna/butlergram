@@ -1,5 +1,6 @@
 package com.butlergram.dto;
 
+import com.butlergram.entity.Subscribe;
 import com.butlergram.entity.Users;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -25,6 +26,7 @@ public class UserUpdateDto {
 
     private String email; //이메일
 
+    private String profileImageUrl;
     private String bio;
     private String phone;
     private String gender;
@@ -44,5 +46,9 @@ public class UserUpdateDto {
     //dto -> entity
     public Users createUser() {
         return modelMapper.map(this, Users.class);
+    }
+
+    public static UserUpdateDto of(Users users) {
+        return modelMapper.map(users, UserUpdateDto.class);
     }
 }

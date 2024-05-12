@@ -41,7 +41,7 @@
             <div class="name-group">
                 <h2 th:text="${userProfileDto.users.name}"></h2>
                 <th:block th:switch="${userProfileDto.pageOwnerState}">
-                    <button th:case="true" class="cta" onclick="location.href='/image/upload'">사진등록</button>
+                    <button th:case="true" class="cta" onclick="location.href='/post/upload'">사진등록</button>
                     <th:block th:case="false">
                         <th:block th:switch="${userProfileDto.subscribeState}">
                             <button th:case="true" class="cta blue" th:onclick="'toggleSubscribe(' + ${userProfileDto.users.id} + ', this)'">구독취소</button>
@@ -99,7 +99,7 @@
 <!--로그아웃, 회원정보변경 모달 th:href="'/user/' + ${#authentication.principal.id}"-->
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
-        <button onclick="location.href='/user/' + ${#authentication.principal.id} + '/update'">회원정보 변경</button>
+        <button th:onclick="'location.href=\'/user/' + ${#authentication.principal.id} + '/update\''">회원정보 변경</button>
         <button onclick="location.href='/user/logout'">로그아웃</button>
         <button onclick="closePopup('.modal-info')">취소</button>
     </div>

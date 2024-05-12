@@ -46,6 +46,10 @@ dependencies {
 	implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.2'
 }
 
+compileJava {
+	options.compilerArgs << "-parameters"
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

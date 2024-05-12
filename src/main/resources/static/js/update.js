@@ -1,5 +1,5 @@
 // (1) 회원정보 수정
-function update(userId, event) {
+function update(userId) {
 	event.preventDefault(); // 폼태그 액션을 막기!!
 	
 	let data = $("#profileUpdate").serialize(); // 데이터를 key=value 형태로 받아올때 쓴다. // FormData는 사진이나 글을 섞어서 보낼때 쓴다.
@@ -7,7 +7,7 @@ function update(userId, event) {
 	console.log(data);
 	
 	$.ajax({
-	    url : "user/" + userId,
+	    url : "/user/" + userId,
 		type: "PUT",
 		data: data,
 		contentType: "application/x-www-form-urlencoded; charset=utf-8", // data의 설명

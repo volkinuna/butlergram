@@ -1,6 +1,7 @@
 package com.butlergram.entity;
 
 import com.butlergram.dto.UserFormDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.util.List;
 @Table(name = "user")
 @Getter
 @Setter
-@ToString
+//@ToString
 public class Users extends BaseEntity {
 
     @Id
@@ -45,7 +46,8 @@ public class Users extends BaseEntity {
 
     private String role; //권한
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
     private List<Post> posts;
 
     //UserFormDto -> User 엔티티 객체로 변환
@@ -61,5 +63,21 @@ public class Users extends BaseEntity {
         user.setPassword(password);
 
         return user;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\": " + id +
+                ", \"username\": \"" + username + "\"" +
+                ", \"password\": \"" + password + "\"" +
+                ", \"email\": \"" + email + "\"" +
+                ", \"name\": \"" + name + "\"" +
+                ", \"profileImageUrl\": \"" + profileImageUrl + "\"" +
+                ", \"bio\": \"" + bio + "\"" +
+                ", \"phone\": \"" + phone + "\"" +
+                ", \"gender\": \"" + gender + "\"" +
+                ", \"role\": \"" + role + "\"" +
+                "}";
     }
 }

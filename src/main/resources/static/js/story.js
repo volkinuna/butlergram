@@ -7,6 +7,9 @@
 	(5) 댓글삭제
  */
 
+ var token = $("meta[name='_csrf']").attr("content"); //token의 실제 값
+ var header = $("meta[name='_csrf_header']").attr("content"); //token의 name
+
 // (0) 현재 로그인한 사용자 아이디
 let principalId = $("#principalId").val();
 
@@ -17,33 +20,37 @@ let page = 0;
 
 function storyLoad() {
 	$.ajax({ // type의 get은 디폴트/ 그래서 여기선 생략함.
-		url: `/api/image?page=${page}`,
-		dataType: "json"
-	}).done(res=>{
-		console.log(res);
-		res.data.content.forEach((image)=>{
-			let storyItem = getStoryItem(image);
-			$("#storyList").append(storyItem);
-		});
-	}).fail(error=>{
-		console.log("오류", error)
-	});
+		url: `/post?page=${page}`,
+		type : "GET",
+		dataType: "json",
+		beforeSend : function(xhr) {
+            xhr.setRequestHeader(header, token);
+        }
+	}).done(res => {
+      		console.log(res);
+      		res.data.content.forEach((image)=>{
+      			let storyItem = getStoryItem(image);
+      			$("#storyList").append(storyItem);
+      		});
+      	}).fail(error=>{
+          		console.log("오류", error.responseText)
+          	});
 }
 
 storyLoad();
 
-function getStoryItem(image) {
+function getStoryItem(post) {
+    let profileImageUrl = post.users.profileImageUrl == null ? '/images/person.jpeg' : '/upload/' + post.users.profileImageUrl;
 	let item = `<div class="story-list__item">
 	<div class="sl__item__header">
 		<div>
-			<img class="profile-image" src="/upload/${image.user.profileImageUrl}"
-				onerror="this.src='/images/person.jpeg'" />
+			<img class="profile-image" src="${profileImageUrl}"/>
 		</div>
-		<div>${image.user.username}</div>
+		<div>${post.users.username}</div>
 	</div>
 
 	<div class="sl__item__img">
-		<img src="/upload/${image.postImageUrl}" />
+		<img src="/upload/${post.postImageUrl}" />
 	</div>
 
 	<div class="sl__item__contents">
@@ -51,31 +58,30 @@ function getStoryItem(image) {
 
 			<button>`;
 			
-			if(image.likeState){
-				item +=`<i class="fas fa-heart active" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;			
+			if(post.likeState){
+				item +=`<i class="fas fa-heart active" id="storyLikeIcon-${post.id}" onclick="toggleLike(${post.id})"></i>`;
 			}else{
-				item +=`<i class="far fa-heart" id="storyLikeIcon-${image.id}" onclick="toggleLike(${image.id})"></i>`;
+				item +=`<i class="far fa-heart" id="storyLikeIcon-${post.id}" onclick="toggleLike(${post.id})"></i>`;
 			}
-				
 				item +=`
 			</button>
 		</div>
 
-		<span class="like"><b id="storyLikeCount-${image.id}">${image.likeCount}</b>likes</span>
+		<span class="like"><b id="storyLikeCount-${post.id}">${post.likeCount}</b>likes</span>
 
 		<div class="sl__item__contents__content">
-			<p>${image.caption}</p>
+			<p>${post.caption}</p>
 		</div>
 
-		<div id="storyCommentList-${image.id}">`;
+		<div id="storyCommentList-${post.id}">`;
 
-			image.comments.forEach((comment)=>{
+			post.comments.forEach((comment)=>{
 				item +=`<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}">
 				<p>
-					<b>${comment.user.username} :</b> ${comment.content}
+					<b>${comment.users.username} :</b> ${comment.content}
 				</p>`;
 				
-				if(principalId == comment.user.id){
+				if(principalId == comment.users.id){
 					item +=`<button onclick="deleteComment(${comment.id})">
 				     	              <i class="fas fa-times"></i>
                                  </button>`;
@@ -90,12 +96,13 @@ function getStoryItem(image) {
 		</div>
 
 		<div class="sl__item__input">
-			<input type="text" placeholder="댓글 달기..." id="storyCommentInput-${image.id}" />
-			<button type="button" onClick="addComment(${image.id})">게시</button>
+			<input type="text" placeholder="댓글 달기..." id="storyCommentInput-${post.id}" />
+			<button type="button" onClick="addComment(${post.id})">게시</button>
 		</div>
 
 	</div>
 </div>`;
+console.log(item)
 	return item;
 }
 
@@ -115,59 +122,68 @@ $(window).scroll(() => {
 });
 
 
-// (3) 좋아요, 안좋아요
-function toggleLike(imageId) {
-	let likeIcon = $(`#storyLikeIcon-${imageId}`);
+// (3) 좋아요, 좋아요취소
+function toggleLike(postId) {
+	let likeIcon = $(`#storyLikeIcon-${postId}`);
 	
 	if (likeIcon.hasClass("far")) { // 클릭을 했을때 far(빈하트)라는걸 좋아요를 하겠다..
 		
 		$.ajax({
+			url: `/post/${postId}/likes`,
 			type: "post",
-			url: `/api/image/${imageId}/likes`,
-			dataType: "json"
-		}).done(res=>{
-			
-			let likeCountStr = $(`#storyLikeCount-${imageId}`).text(); // 해당 아이디로 접근해서 그 내부에있는 text를 가져와라..
-		    let likeCount = Number(likeCountStr) + 1; // likeCountStr는 문자열. Number로 캐스팅해줘야함.
-			$(`#storyLikeCount-${imageId}`).text(likeCount);
-			
-			likeIcon.addClass("fas");
-	    	likeIcon.addClass("active");
-	    	likeIcon.removeClass("far");
-		}).fail(error=>{
-			console.log("오류", error);
+			dataType: "json",
+			contentType : "application/json",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success : function(result, status) {
+			    let likeCountStr = $(`#storyLikeCount-${postId}`).text(); // 해당 아이디로 접근해서 그 내부에있는 text를 가져와라..
+		        let likeCount = Number(likeCountStr) + 1; // likeCountStr는 문자열. Number로 캐스팅해줘야함.
+			    $(`#storyLikeCount-${postId}`).text(likeCount);
+
+			    likeIcon.addClass("fas");
+	    	    likeIcon.addClass("active");
+	    	    likeIcon.removeClass("far");
+            },
+            error : function(jqXHR, status, error) {
+			    console.log("오류", error);
+            }
 		});
 
 	} else { // 좋아요 취소를 하겠다..
 		
 		$.ajax({
-			type: "delete",
-			url: `/api/image/${imageId}/likes`,
-			dataType: "json"
-		}).done(res=>{
-			
-			let likeCountStr = $(`#storyLikeCount-${imageId}`).text(); // 해당 아이디로 접근해서 그 내부에있는 text를 가져와라..
-		    let likeCount = Number(likeCountStr) - 1; // likeCountStr는 문자열. Number로 캐스팅해줘야함.
-			$(`#storyLikeCount-${imageId}`).text(likeCount);
-			
-	    	likeIcon.removeClass("fas");
-	    	likeIcon.removeClass("active");
-	    	likeIcon.addClass("far");
-		}).fail(error=>{
-			console.log("오류", error);
+			url: `/post/${postId}/likes`,
+			type : "DELETE",
+            dataType : "json",
+            contentType : "application/json",
+            beforeSend : function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            success : function(result, status) {
+			    let likeCountStr = $(`#storyLikeCount-${postId}`).text(); // 해당 아이디로 접근해서 그 내부에있는 text를 가져와라..
+		        let likeCount = Number(likeCountStr) - 1; // likeCountStr는 문자열. Number로 캐스팅해줘야함.
+			    $(`#storyLikeCount-${postId}`).text(likeCount);
+
+	    	    likeIcon.removeClass("fas");
+	    	    likeIcon.removeClass("active");
+	    	    likeIcon.addClass("far");
+            },
+            error : function(jqXHR, status, error) {
+			    console.log("오류", error);
+            }
 		});
-		
 	}
 }
 
 // (4) 댓글쓰기
-function addComment(imageId) {
+function addComment(postId) {
 
-	let commentInput = $(`#storyCommentInput-${imageId}`);
-	let commentList = $(`#storyCommentList-${imageId}`);
+	let commentInput = $(`#storyCommentInput-${postId}`);
+	let commentList = $(`#storyCommentList-${postId}`);
 
 	let data = {
-		imageId: imageId,
+		postId: postId,
 		content: commentInput.val()
 	}
 	
@@ -180,30 +196,35 @@ if (data.content === "") {
 	}
 	
 	$.ajax({
-		type: "post",
-		url: "/api/comment",
+		url: "/comment",
+		type: "POST",
 		data: JSON.stringify(data),
 		contentType: "application/json; charset=utf-8",
-		dataType: "json"		
-	}).done(res=>{
-		//console.log("성공", res);
-		
-		let comment = res.data;
-		
-		let content = `
-		  <div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"> 
-		    <p>
-		      <b>${comment.user.username} :</b>
-		      ${comment.content}
-		    </p>
-		    <button onclick="deleteComment(${comment.id})"><i class="fas fa-times"></i></button>
-		  </div>
-        `;
-	commentList.prepend(content);
-		
-	}).fail(error=>{
-		console.log("오류", error.responseJSON.data.content);
-		alert(error.responseJSON.data.content);
+		dataType: "json",
+		beforeSend : function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success : function(res, status) {
+		    //console.log("성공", res);
+
+		    let comment = res.data;
+
+		    let content = `
+		        <div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}">
+		        <p>
+		            <b>${comment.users.username} :</b>
+		            ${comment.content}
+		        </p>
+		        <button onclick="deleteComment(${comment.id})"><i class="fas fa-times"></i></button>
+		        </div>
+            `;
+
+	        commentList.prepend(content);
+        },
+        error : function(jqXHR, status, error) {
+		    console.log("오류", error.responseJSON.data.content);
+		    alert(error.responseJSON.data.content);
+        }
 	});
 
 	commentInput.val(""); // 인풋 필드를 깨끗하게 비워준다. 오류가 나도 비워줄꺼라 res에 안 넣고 따로 둔것.
@@ -212,16 +233,21 @@ if (data.content === "") {
 // (5) 댓글 삭제
 function deleteComment(commentId) {
 	$.ajax({
-		type: "delete",
-		url: `/api/comment/${commentId}`,
-		dataType: "json"
-	}).done(res=>{
-		console.log("성공", res);
-		$(`#storyCommentItem-${commentId}`).remove();
-	}).fail(error=>{
-		console.log("오류", error);
+		url: `/comment/${commentId}`,
+		type : "DELETE",
+        dataType : "json",
+        contentType : "application/json",
+        beforeSend : function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        success : function(result, status) {
+		    console.log("성공", res);
+		    $(`#storyCommentItem-${commentId}`).remove();
+        },
+        error : function(jqXHR, status, error) {
+		    console.log("오류", error);
+        }
 	});
-
 }
 
 

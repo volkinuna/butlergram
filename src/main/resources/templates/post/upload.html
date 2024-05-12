@@ -10,8 +10,7 @@
 <!-- <head>
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-</head>
-<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/> -->
+</head> -->
 
 <!--사진 업로드페이지 중앙배치-->
 <main class="uploadContainer" layout:fragment="content">
@@ -28,15 +27,17 @@
         <!--사진업로드 로고 end-->
 
         <!--사진업로드 Form-->
-        <form class="upload-form" action="/image" method="post" enctype="multipart/form-data">
-            <input  type="file" name="file" onchange="imageChoose(this)"/>
+        <form class="upload-form" th:action="@{/post/story}" method="post"
+              th:object="${postUpdateDto}" name="upload" enctype="multipart/form-data">
+            <input type="file" name="file" th:field="*{file}" onchange="imageChoose(this)"/>
             <div class="upload-img">
                 <img src="/images/person.jpeg" alt="사진" id="imageUploadPreview" />
             </div>
 
             <!--사진설명 + 업로드버튼-->
             <div class="upload-form-detail">
-                <input type="text" placeholder="사진설명" name="caption"/>
+                <input type="text" placeholder="사진설명" name="caption" th:field="*{caption}" />
+                <p th:if="${#fields.hasErrors('caption')}" th:errors="*{caption}" class="fieldError">Incorrect Data</p>
                 <button class="cta blue">업로드</button>
             </div>
             <!--사진설명 end-->

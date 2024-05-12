@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.awt.*;
 import java.security.Principal;
 
 @Controller
@@ -43,32 +42,43 @@ public class PostController {
 //    }
 
     @GetMapping("/post/upload")
-    public String upload() {
+    public String upload(Model model) {
+        model.addAttribute("postUpdateDto", new PostUploadDto());
         return "post/upload";
     }
 
-//    @PostMapping("/post") // 사용자로부터 데이터를 받고 서비스를 호출한다.
-//    public String postUpload(PostUploadDto postUploadDto, Principal principal) {
-//        // 서비스 호출                                  // @AuthenticationPrincipal PrincipalDetails principalDetails로 로그인한 유저정보 받기
-//
-//        //if(imageUploadDto.getFile().isEmpty()) {
-//        //    throw new CustomValidationException("이미지가 첨부되지 않았습니다.", null);
-//        //}
-//
-//        if(postUploadDto.getFile().isEmpty()) {
-//            throw new CustomException("이미지가 첨부되지 않았습니다.");
-//        }
-//
-//        //imageService.사진업로드(imageUploadDto, principalDetails);
-//        //return "redirect:/user/"+principalDetails.getUser().getId();
-//
-//        postService.postUpload(postUploadDto, principal);
-//        return "redirect:/user/" + userService.findByUsername(principal.getName()).getId();
-//    }
+    @PostMapping("/post/story") // 사용자로부터 데이터를 받고 서비스를 호출한다.
+    public String postUpload(PostUploadDto postUploadDto, Principal principal) {
+        // 서비스 호출                                  // @AuthenticationPrincipal PrincipalDetails principalDetails로 로그인한 유저정보 받기
 
-//    @GetMapping("/post")
-//    public ResponseEntity<?> story(Principal principal, @PageableDefault(size = 3) Pageable pageable){ // @PageableDefault을 붙이면 pageable를 이용해서 페이징을 할 수 있다.
-//        Page<Post> posts = postService.story(userService.findByUsername(principal.getName()).getId(), pageable);
-//        return new ResponseEntity<>(new CMRespDto<>(1, "성공", posts), HttpStatus.OK);
-//    }
+        //if(imageUploadDto.getFile().isEmpty()) {
+        //    throw new CustomValidationException("이미지가 첨부되지 않았습니다.", null);
+        //}
+
+        if(postUploadDto.getFile().isEmpty()) {
+            throw new CustomException("이미지가 첨부되지 않았습니다.");
+        }
+
+        //imageService.사진업로드(imageUploadDto, principalDetails);
+        //return "redirect:/user/"+principalDetails.getUser().getId();
+
+        postService.postUpload(postUploadDto, principal);
+        return "redirect:/user/" + userService.findByUsername(principal.getName()).getId();
+    }
+
+    @GetMapping("/post")
+    public ResponseEntity<?> story(Principal principal, @PageableDefault(size = 3) Pageable pageable){ // @PageableDefault을 붙이면 pageable를 이용해서 페이징을 할 수 있다.
+        System.out.println(pageable);
+        try {
+            System.out.println("hey");
+            Page<Post> posts = postService.story(userService.findByUsername(principal.getName()).getId(), pageable);
+            System.out.println(posts);
+            CMRespDto cmRespDto = new CMRespDto<>(1, "성공", posts);
+            System.out.println(cmRespDto);
+            return new ResponseEntity<>(cmRespDto, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(new CMRespDto<>(2, "실패", null), HttpStatus.BAD_REQUEST);
+        }
+    }
 }

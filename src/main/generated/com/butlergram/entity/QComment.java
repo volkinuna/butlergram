@@ -42,7 +42,7 @@ public class QComment extends EntityPathBase<Comment> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updateTime = _super.updateTime;
 
-    public final QUsers user;
+    public final QUsers users;
 
     public QComment(String variable) {
         this(Comment.class, forVariable(variable), INITS);
@@ -63,7 +63,7 @@ public class QComment extends EntityPathBase<Comment> {
     public QComment(Class<? extends Comment> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.post = inits.isInitialized("post") ? new QPost(forProperty("post"), inits.get("post")) : null;
-        this.user = inits.isInitialized("user") ? new QUsers(forProperty("user")) : null;
+        this.users = inits.isInitialized("users") ? new QUsers(forProperty("users")) : null;
     }
 
 }

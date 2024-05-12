@@ -1,6 +1,7 @@
 package com.butlergram.service;
 
 import com.butlergram.dto.UserProfileDto;
+import com.butlergram.dto.UserUpdateDto;
 import com.butlergram.entity.Users;
 import com.butlergram.repository.SubscribeRepository;
 import com.butlergram.repository.UserRepository;

@@ -12,11 +12,13 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,12 +56,19 @@ public class UserController {
     }
 
     @GetMapping("/user/{id}/update")
-    public String update(@PathVariable("id") Long id, Principal principal) {
+    public String update(@PathVariable("id") Long id, Principal principal, Model model) {
+        Users users = userService.findByUsername(principal.getName());
+
+        UserUpdateDto userUpdateDto = UserUpdateDto.of(users);
+
+        userUpdateDto.getPassword();
+
+        model.addAttribute("userUpdateDto", userUpdateDto);
         return "user/update";
     }
 
 
-    @PutMapping("/user/{id}")
+    @PostMapping("/user/{id}")
     public CMRespDto<?> update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
             BindingResult bindingResult, Principal principal) {
         Users userEntity =  userService.update(id, userUpdateDto.createUser());

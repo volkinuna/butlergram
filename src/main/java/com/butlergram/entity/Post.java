@@ -11,7 +11,6 @@ import java.util.List;
 @Table(name = "post")
 @Getter
 @Setter
-@ToString
 public class Post extends BaseEntity {
 
     @Id
@@ -24,7 +23,7 @@ public class Post extends BaseEntity {
 
     @JoinColumn(name="user_id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private Users user;
+    private Users users;
 
     @OneToMany(mappedBy = "post")
     private List<Likes> likes;
@@ -37,4 +36,13 @@ public class Post extends BaseEntity {
 
     @Transient
     private int likeCount;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"id\": \"" + id + "\"," +
+                "\"caption\": \"" + caption + "\"," +
+                "\"postImageUrl\": \"" + postImageUrl + "\"" +
+                "}";
+    }
 }

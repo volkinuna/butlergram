@@ -34,7 +34,7 @@ public class CommentService {
         Comment comment = new Comment();
         comment.setContent(content);
         comment.setPost(post); // DB에서 Select해서 그 객체를 받아와서 넣어야하는데... 가짜 객체를 만들어서 넣으면 좀 쉽다.
-        comment.setUser(userEntity);     // 이렇게 안하면 DB에서 ImageRepository에서 findById()로 찾아서 넣어야한다.
+        comment.setUsers(userEntity);     // 이렇게 안하면 DB에서 ImageRepository에서 findById()로 찾아서 넣어야한다.
 
         return commentRepository.save(comment);
     }

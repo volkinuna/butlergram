@@ -1,5 +1,6 @@
 package com.butlergram.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,8 +22,9 @@ public class Comment extends BaseEntity {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private Users user;
+    private Users users;
 
+    @JsonIgnore
     @JoinColumn(name = "post_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Post post;

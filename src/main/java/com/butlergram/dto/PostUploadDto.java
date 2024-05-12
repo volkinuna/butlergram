@@ -2,6 +2,7 @@ package com.butlergram.dto;
 
 import com.butlergram.entity.Post;
 import com.butlergram.entity.Users;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,7 @@ public class PostUploadDto {
 
     private MultipartFile file; // MultipartFile 타입에는 @NotBlank가 지원이 안된다.
 
+    @NotEmpty(message = "간단한 사진 설명은 필수 입력값입니다.")
     private String caption;
 
 //    public Post toEntity(String postImageUrl, Users users) {
@@ -28,7 +30,10 @@ public class PostUploadDto {
     private static ModelMapper modelMapper = new ModelMapper();
 
     //dto -> entity
-    public Post createPost() {
-        return modelMapper.map(this, Post.class);
+    public Post createPost(String postImageUrl, Users users) {
+        Post post = modelMapper.map(this, Post.class);
+        post.setPostImageUrl(postImageUrl);
+        post.setUsers(users);
+        return post;
     }
 }

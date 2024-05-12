@@ -22,17 +22,18 @@
             <!--프로필셋팅 아이디영역-->
             <div class="content-item__01">
                 <div class="item__img">
-                    <img src="#" />
+                    <img src="#"
+                         th:src="${#strings.isEmpty(userUpdateDto.profileImageUrl) ? '/images/person.jpeg' : '/upload/' + userUpdateDto.profileImageUrl}" />
                 </div>
                 <div class="item__username">
-                    <h2 th:text="${principal.username}"></h2>
+                    <h2 th:text="${#authentication.principal.username}"></h2>
                 </div>
             </div>
             <!--프로필셋팅 아이디영역 end-->
 
             <!--프로필 수정 -->
-            <form id="profileUpdate" th:action="@{'/user/' + ${userUpdateDto.id}}" method="put"
-                th:object="${userUpdateDto}" name="update">
+            <form id="profileUpdate" th:action="@{'/user/' + ${#authentication.principal.id}}" method="post"
+                  name="update" th:object="${userUpdateDto}">
                 <div class="content-item__02">
                     <div class="item__title">이름</div>
                     <div class="item__input">
@@ -49,7 +50,7 @@
                 <div class="content-item__04">
                     <div class="item__title">패스워드</div>
                     <div class="item__input">
-                        <input type="password" name="password" th:field="*{password}" placeholder="패스워드" />
+                        <input type="password" th:field="*{password}" placeholder="패스워드" />
                         <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError">Incorrect Data</p>
                     </div>
                 </div>
@@ -62,7 +63,7 @@
                 <div class="content-item__06">
                     <div class="item__title">소개</div>
                     <div class="item__input">
-                        <textarea name="bio" id="" rows="3" th:field="*{bio}"></textarea>
+                        <textarea name="bio" th:field="*{bio}" rows="3" ></textarea>
                     </div>
                 </div>
                 <div class="content-item__07">
@@ -86,7 +87,7 @@
                 <div class="content-item__10">
                     <div class="item__title">성별</div>
                     <div class="item__input">
-                        <input type="text" name="gender" th:field="*{gender}" />
+                        <input type="text" name="gender" th:field="*{gender}" placeholder="성별" />
                     </div>
                 </div>
 
@@ -94,7 +95,7 @@
                 <div class="content-item__11">
                     <div class="item__title"></div>
                     <div class="item__input">
-                        <button type="button" onclick="beforeSubmit()">등록</button>
+                        <button type="submit">등록</button>
                     </div>
                 </div>
                 <!--제출버튼 end-->
