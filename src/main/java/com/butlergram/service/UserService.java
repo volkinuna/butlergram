@@ -83,7 +83,7 @@ public class UserService {
 
     //회원 수정
     @Transactional
-    public Users update(Long id, Users users) {
+    public Users update(Long id, Users users) throws Exception {
 
         Users userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 

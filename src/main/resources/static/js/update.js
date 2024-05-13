@@ -15,9 +15,9 @@ function update(userId) {
 		beforeSend : function(xhr) {
             xhr.setRequestHeader(header, token);
         },
-        success : function(result, status) {
-            console.log("update 성공", res);
-            location.href = `/user/${userId}`;
+        success : function(res, status) {
+            console.log("update 성공");
+//            location.href = '/user/' + userId;
         },
         error : function(jqXHR, status, error) {
             if(error.data == null) {

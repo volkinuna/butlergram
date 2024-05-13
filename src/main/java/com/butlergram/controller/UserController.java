@@ -36,7 +36,7 @@ public class UserController {
     public String profile(@PathVariable(value = "userId") Long userId, Model model, Principal principal) {
         UserProfileDto userProfileDto = userService.profile(userId, userService.findByUsername(principal.getName()).getId());
         model.addAttribute("userProfileDto", userProfileDto);
-        return "user/profile";
+        return "users/profile";
     }
 
     @PutMapping("/user/{principalId}/profileImageUrl")
@@ -64,15 +64,21 @@ public class UserController {
         userUpdateDto.getPassword();
 
         model.addAttribute("userUpdateDto", userUpdateDto);
-        return "user/update";
+        return "users/update";
     }
 
 
     @PostMapping("/user/{id}")
-    public CMRespDto<?> update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
+    public String update(@PathVariable("id") Long id, @Valid UserUpdateDto userUpdateDto,
             BindingResult bindingResult, Principal principal) {
-        Users userEntity =  userService.update(id, userUpdateDto.createUser());
+        try {
+            Users userEntity = userService.update(id, userUpdateDto.createUser());
+            return "redirect:/user/" + userEntity.getId() ;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "users/update";
+        }
         //principalDetails.setUser(userEntity); // 세션 정보 변경
-        return new CMRespDto<>(1, "회원수정완료", userEntity);
+
     }
 }
