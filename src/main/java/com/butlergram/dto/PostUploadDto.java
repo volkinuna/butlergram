@@ -16,7 +16,6 @@ public class PostUploadDto {
 
     private MultipartFile file; // MultipartFile 타입에는 @NotBlank가 지원이 안된다.
 
-    @NotEmpty(message = "간단한 사진 설명은 필수 입력값입니다.")
     private String caption;
 
 //    public Post toEntity(String postImageUrl, Users users) {
