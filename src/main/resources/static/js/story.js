@@ -240,7 +240,7 @@ function deleteComment(commentId) {
         beforeSend : function(xhr) {
             xhr.setRequestHeader(header, token);
         },
-        success : function(result, status) {
+        success : function(res, status) {
 		    console.log("성공", res);
 		    $(`#storyCommentItem-${commentId}`).remove();
         },

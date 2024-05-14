@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,20 +27,20 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
 
-    @GetMapping({"/","/post/story"})
+    @GetMapping({"/", "/post/story"})
     public String story() {
         return "post/story";
     }
 
     // API 구현하다면 이유 - 브라우저에서 요청하는게 아니라, 안드로이드나 IOS 요청시..(데이터를 줘야지 html파일을 줄 순 없으니깐..)
-//    @GetMapping("/post/popular")
-//    public String popularStory(Model model) {
-//        // api는 데이터를 리턴하는 서버!! 인기페이지로 갈땐 ajax를 할게 아니라서 데이터를 리턴하는 서버를 만들 필요는 없음. 그래서 model에 담고 데이터를 들고 가기만 하면 됨.
-//        List<Post> posts = postService.popular();
-//        model.addAttribute("posts", posts);
-//
-//        return "post/popular";
-//    }
+    @GetMapping("/post/popular")
+    public String popular(Model model) {
+        // api는 데이터를 리턴하는 서버!! 인기페이지로 갈땐 ajax를 할게 아니라서 데이터를 리턴하는 서버를 만들 필요는 없음. 그래서 model에 담고 데이터를 들고 가기만 하면 됨.
+        List<Post> posts = postService.popular();
+        model.addAttribute("posts", posts);
+
+        return "post/popular";
+    }
 
     @GetMapping("/post/upload")
     public String upload(Model model) {

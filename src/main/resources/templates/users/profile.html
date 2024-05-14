@@ -59,7 +59,7 @@
                 <ul>
                     <li><a href="#">게시물<span th:text="${userProfileDto.imageCount}"></span>
                     </a></li>
-                    <li><a href="javascript:subscribeInfoModalOpen(${userProfileDto.users.id});">구독정보<span th:text="${userProfileDto.subscribeCount}"></span>
+                    <li><a th:href="javascript:subscribeInfoModalOpen(${userProfileDto.users.id});">구독정보<span th:text="${userProfileDto.subscribeCount}"></span>
                     </a></li>
                 </ul>
             </div>
@@ -120,7 +120,7 @@
     <div class="subscribe">
         <div class="subscribe-header">
             <span>구독정보</span>
-            <button onclick="modalClose()">
+            <button th:onclick="modalClose()">
                 <i class="fas fa-times"></i>
             </button>
         </div>

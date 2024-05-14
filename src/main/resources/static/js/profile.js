@@ -72,7 +72,7 @@ function subscribeInfoModalOpen(userId) {
             xhr.setRequestHeader(header, token);
         },
         success : function(result, status) {
-		    console.log(res.data);
+		    console.log(result.data);
 
 		    res.data.forEach((u)=>{
 			    let item = getSubscribeModalItem(u);
