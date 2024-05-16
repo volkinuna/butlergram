@@ -51,7 +51,7 @@ public class AuthController {
             return "auth/signUp";
         }
 
-        return "redirect:/";
+        return "auth/signIn";
     }
 
     //로그인 실패시

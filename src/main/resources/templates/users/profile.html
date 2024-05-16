@@ -59,7 +59,7 @@
                 <ul>
                     <li><a href="#">게시물<span th:text="${userProfileDto.imageCount}"></span>
                     </a></li>
-                    <li><a th:href="javascript:subscribeInfoModalOpen(${userProfileDto.users.id});">구독정보<span th:text="${userProfileDto.subscribeCount}"></span>
+                    <li><a th:onclick="'subscribeInfoModalOpen(' + ${userProfileDto.users.id} + ')'">구독정보<span th:text="${userProfileDto.subscribeCount}"></span>
                     </a></li>
                 </ul>
             </div>
