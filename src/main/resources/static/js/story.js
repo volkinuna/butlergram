@@ -46,7 +46,12 @@ function getStoryItem(post) {
 		<div>
 			<img class="profile-image" src="${profileImageUrl}"/>
 		</div>
-		<div>${post.users.username}</div>
+		<div class="story_between">
+		    <div>${post.users.username}</div>
+		    <div>
+		        <button onclick="deletePost(${post.id})"><i class="fas fa-times"></i></button>
+		    </div>
+		</div>
 	</div>
 
 	<div class="sl__item__img">
@@ -121,6 +126,47 @@ $(window).scroll(() => {
 	}
 });
 
+//스토리 삭제
+function deletePost(postId) {
+    const deleteConf = confirm("삭제 하시겠습니까?");
+    if (!deleteConf) return; //삭제 버튼 선택시
+
+    var token = $("meta[name='_csrf']").attr("content"); //token의 실제 값
+    var header = $("meta[name='_csrf_header']").attr("content"); //token의 name
+
+    $.ajax({
+        url : "/post/" + postId + "/delete",
+		type : "DELETE",
+		contentType : "application/json",
+		beforeSend : function(xhr) {
+		    //데이터를 전송하기 전에 헤더에 csrf 값을 설정
+            xhr.setRequestHeader(header, token);
+		},
+		dataType : "json",
+		cache : false,
+		success : function(result, status) {
+			var path = location.pathname;
+
+			//페이지 번호만 가져온다.
+			var page = path.substring(path.lastIndexOf("/") + 1);
+
+			//사이트 new 메뉴를 클릭하고 들어왔을때를 대비
+			if (page == 'post') {
+			    page = 0;
+			}
+
+			//주문 취소 후에 원래 페이지로 이동 시켜준다.
+			location.href = '/post/' + page;
+		},
+		error : function(jqXHR, status, error) {
+			if(jqXHR.status == '401') {
+                alert('로그인 후 이용해주세요.');
+                location.href = '/user/login';
+            } else {
+                alert(jqXHR.responseText);
+            }
+    });
+}
 
 // (3) 좋아요, 좋아요취소
 function toggleLike(postId) {

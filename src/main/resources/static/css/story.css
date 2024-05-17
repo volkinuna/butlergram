@@ -218,3 +218,7 @@
   border: 2px solid #8a3ab8;
 }
 
+.story_between {
+   display: flex;
+   justify: between
+}

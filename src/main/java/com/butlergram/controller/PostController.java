@@ -14,8 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -81,5 +80,21 @@ public class PostController {
             e.printStackTrace();
             return new ResponseEntity<>(new CMRespDto<>(2, "실패", null), HttpStatus.BAD_REQUEST);
         }
+    }
+
+    //스토리 삭제(Ajax로 처리)
+    @DeleteMapping("/post/{postId}/delete")
+    public @ResponseBody ResponseEntity deletePost(@PathVariable("postId") Long postId,
+                                                    Principal principal) {
+
+        //1. 본인확인
+        if (!postService.validatePost(postId, principal.getName())) {
+            return new ResponseEntity<String>("스토리 삭제 권한이 없습니다.", HttpStatus.FORBIDDEN);
+        }
+
+        //2. 스토리 삭제
+        postService.deletePost(postId);
+
+        return new ResponseEntity<Long>(postId, HttpStatus.OK);
     }
 }

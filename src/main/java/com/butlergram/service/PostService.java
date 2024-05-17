@@ -2,14 +2,17 @@ package com.butlergram.service;
 
 import com.butlergram.dto.PostUploadDto;
 import com.butlergram.entity.Post;
+import com.butlergram.entity.Users;
 import com.butlergram.repository.PostRepository;
 import com.butlergram.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.awt.*;
 import java.nio.file.Files;
@@ -82,5 +85,34 @@ public class PostService {
 
         // System.out.println(imageEntity); <- 주석을 풀면 사진등록 오류가 나는 이유는? Image의 Getter가 다 출력이 됨. Image 클래스와 User 클래스를 반복으로 돌아감. User 클래스 출력에서 문제가 발생.
         // imageEntity를 출력할때 sysout 내부적으론 imageEntity.toSting()이 자동으로 호출됨.
+    }
+
+    //본인 확인(현재 로그인한 사용자와 주문 데이터를 생성한 사용자가 같은지 검사)
+    @Transactional(readOnly = true)
+    public boolean validatePost(Long postId, String username) {
+        //로그인한 사용자 찾기
+        Users curUser = userRepository.findByUsername(username);
+
+        //스토리 내역
+        Post post = postRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        Users savedUser = post.getUsers(); //등록한 사용자 찾기
+
+        //로그인한 사용자의 유저네임과 주문한 사용자의 유저네임이 같은지 비교
+        if (!StringUtils.equals(curUser.getUsername(), savedUser.getUsername())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    //스토리 삭제
+    public void deletePost(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(EntityNotFoundException::new);
+
+        //CaseCade 설정(CaseCade.All)을 통해 order의 자식 엔티티에 해당하는 orderItem도 같이 삭제된다.
+        postRepository.delete(post); //deletes
     }
 }
