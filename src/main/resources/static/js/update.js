@@ -1,23 +1,20 @@
-// (1) 회원정보 수정
+//회원정보 수정
 function update(userId) {
-	event.preventDefault(); // 폼태그 액션을 막기!!
+	event.preventDefault();
 	
-	let data = $("#profileUpdate").serialize(); // 데이터를 key=value 형태로 받아올때 쓴다. // FormData는 사진이나 글을 섞어서 보낼때 쓴다.
-	
-	console.log(data);
+	let data = $("#profileUpdate").serialize();
 	
 	$.ajax({
 	    url : "/user/" + userId,
 		type: "PUT",
 		data: data,
-		contentType: "application/x-www-form-urlencoded; charset=utf-8", // data의 설명
-		dataType: "json",	// 응답받을 data 타입
+		contentType: "application/x-www-form-urlencoded; charset=utf-8",
+		dataType: "json",
 		beforeSend : function(xhr) {
             xhr.setRequestHeader(header, token);
         },
         success : function(res, status) {
             console.log("update 성공");
-//            location.href = '/user/' + userId;
         },
         error : function(jqXHR, status, error) {
             if(error.data == null) {

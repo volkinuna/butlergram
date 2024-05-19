@@ -14,17 +14,9 @@ import java.awt.*;
 @Setter
 public class PostUploadDto {
 
-    private MultipartFile file; // MultipartFile 타입에는 @NotBlank가 지원이 안된다.
+    private MultipartFile file;
 
     private String caption;
-
-//    public Post toEntity(String postImageUrl, Users users) {
-//        return Post.builder()
-//                .caption(caption)
-//                .postImageUrl(postImageUrl) // 정확한 경로가 들어가야함.
-//                .user(users) // Image 객체는 user 정보가 필요함.
-//                .build();
-//    }
 
     private static ModelMapper modelMapper = new ModelMapper();
 

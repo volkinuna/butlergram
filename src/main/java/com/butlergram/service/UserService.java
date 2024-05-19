@@ -32,11 +32,11 @@ public class UserService {
     //회원 프로필사진 변경
     @Transactional
     public Users profileImageUpdate(Long principalId, MultipartFile profileImageFile) {
+
         UUID uuid = UUID.randomUUID();
         String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
 
         Path imageFilePath = Paths.get(imgLocation+imageFileName);
-        System.out.println(imageFilePath);
 
         try {
             Files.write(imageFilePath, profileImageFile.getBytes());
@@ -59,6 +59,7 @@ public class UserService {
     //회원 프로필
     @Transactional(readOnly = true)
     public UserProfileDto profile(Long userId, Long principalId) {
+
         UserProfileDto userProfileDto = new UserProfileDto();
 
         Users userEntity = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
@@ -73,7 +74,7 @@ public class UserService {
         userProfileDto.setSubscribeState(subscribeState == 1);
         userProfileDto.setSubscribeCount(subscribeCount);
 
-        // 프로필페이지 게시물에 좋아요 카운트 추가하기
+        //프로필페이지 게시물에 좋아요 카운트 추가하기
         userEntity.getPosts().forEach((post)->{
             post.setLikeCount(post.getLikes().size());
         });

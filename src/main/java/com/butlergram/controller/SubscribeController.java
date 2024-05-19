@@ -20,13 +20,17 @@ public class SubscribeController {
 
     @PostMapping("/user/subscribe/{toUserId}")
     public ResponseEntity<?> subscribe(@PathVariable("toUserId") Long toUserId, Principal principal){
+
         subscribeService.subscribe(userService.findByUsername(principal.getName()).getId(), toUserId);
+
         return new ResponseEntity<>(new CMRespDto<>(1, "구독하기 성공", null), HttpStatus.OK);
     }
 
     @DeleteMapping("/user/subscribe/{toUserId}")
     public ResponseEntity<?> unSubscribe(@PathVariable("toUserId") Long toUserId, Principal principal){
+
         subscribeService.unSubscribe(userService.findByUsername(principal.getName()).getId(), toUserId);
+
         return new ResponseEntity<>(new CMRespDto<>(1, "구독취소하기 성공", null), HttpStatus.OK);
     }
 }

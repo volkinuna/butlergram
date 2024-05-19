@@ -22,13 +22,17 @@ public class LikesController {
 
     @PostMapping("/post/{postId}/likes")
     public ResponseEntity<?> likes(@PathVariable("postId") Long postId, Principal principal){
+
         likesService.likes(postId, userService.findByUsername(principal.getName()).getId());
-        return new ResponseEntity<>(new CMRespDto<>(1, "좋아요 성공", null), HttpStatus.CREATED); // CREATED(201)가 OK(200)보다 더 정확한 상태 코드.
+
+        return new ResponseEntity<>(new CMRespDto<>(1, "좋아요 성공", null), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/post/{postId}/likes")
     public ResponseEntity<?> unLikes(@PathVariable("postId") Long postId, Principal principal){
+
         likesService.unLikes(postId, userService.findByUsername(principal.getName()).getId());
+
         return new ResponseEntity<>(new CMRespDto<>(1, "좋아요취소 성공", null), HttpStatus.OK);
     }
 }

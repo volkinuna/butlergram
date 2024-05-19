@@ -20,8 +20,10 @@ public class SubscribeService {
     private final SubscribeRepository subscribeRepository;
     private final EntityManager em;
 
+    //프로필페이지 구독정보 리스트
     @Transactional(readOnly = true)
     public List<SubscribeDto> subscribeList(Long principalId, Long userId) {
+        
         StringBuffer sb = new StringBuffer();
         sb.append("SELECT u.user_id, u.username, u.profile_image_url, ");
         sb.append("IF((SELECT 1 FROM subscribe WHERE from_user_id = ? AND to_user_id = u.user_id), 1, 0) subscribeState, ");
@@ -36,11 +38,14 @@ public class SubscribeService {
                 .setParameter(3, userId);
 
         List<Object[]> results = query.getResultList();
+        
         return mapResultsToDto(results);
     }
 
     private List<SubscribeDto> mapResultsToDto(List<Object[]> results) {
+        
         List<SubscribeDto> subscribeDtos = new ArrayList<>();
+        
         for (Object[] result : results) {
             Long id = ((Number) result[0]).longValue();
             String userName = (String) result[1];
@@ -51,19 +56,22 @@ public class SubscribeService {
             SubscribeDto subscribeDto = new SubscribeDto(id, userName, profileImageUrl, subscribeState, equalUserState);
             subscribeDtos.add(subscribeDto);
         }
+        
         return subscribeDtos;
     }
 
+    //구독하기
     @Transactional
     public void subscribe(Long fromUserId, Long toUserId) {
+
         try {
             subscribeRepository.subscribe(fromUserId, toUserId);
         } catch (Exception e) {
             throw new CustomException("이미 구독을 하였습니다.");
         }
-
     }
 
+    //구독취소
     @Transactional
     public void unSubscribe(Long fromUserId, Long toUserId) {
         subscribeRepository.unSubscribe(fromUserId, toUserId);

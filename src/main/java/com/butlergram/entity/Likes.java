@@ -29,7 +29,6 @@ public class Likes extends BaseEntity {
     @ManyToOne
     private Post post;
 
-    //@JsonIgnoreProperties({"images"}) // Postman으로 확인시 -> user의 likes의 images가 무한참조 확인됨.
     @JsonIgnore
     @JoinColumn(name = "user_id")
     @ManyToOne

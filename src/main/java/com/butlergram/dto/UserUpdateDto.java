@@ -31,16 +31,6 @@ public class UserUpdateDto {
     private String phone;
     private String gender;
 
-//    public User toEntity() {
-//        return User.builder()
-//                .name(name) // Validation 체크.
-//                .password(password) // 패스워드 미기재시 데이터베이스에 공백의 패스워드가 들어가므로 문제가 됨. Validation 체크.
-//                .bio(bio)
-//                .phone(phone)
-//                .gender(gender)
-//                .build();
-//    }
-
     private static ModelMapper modelMapper = new ModelMapper();
 
     //dto -> entity

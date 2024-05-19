@@ -96,7 +96,7 @@
     </div>
 </section>
 
-<!--로그아웃, 회원정보변경 모달 th:href="'/user/' + ${#authentication.principal.id}"-->
+<!--로그아웃, 회원정보변경 모달-->
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
         <button th:onclick="'location.href=\'/user/' + ${#authentication.principal.id} + '/update\''">회원정보 변경</button>

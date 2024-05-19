@@ -19,14 +19,14 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final AuthService authService;
 
-    //로그인 화면
-    @GetMapping(value = "/auth/login") //localhost/user/login
+    //로그인
+    @GetMapping(value = "/auth/login")
     public String loginUser() {
         return "auth/signIn";
     }
 
-    //회원가입 화면
-    @GetMapping(value = "/auth/new") //localhost/user/new
+    //회원가입
+    @GetMapping(value = "/auth/new")
     public String userForm(Model model) {
         model.addAttribute("userFormDto", new UserFormDto());
         return "auth/signUp";
@@ -34,20 +34,20 @@ public class AuthController {
 
     //실제 회원가입 처리
     @PostMapping(value = "/auth/new")
-    public String userForm(@Valid UserFormDto userFormDto,
-                             BindingResult bindingResult, Model model) {
+    public String userForm(@Valid UserFormDto userFormDto, BindingResult bindingResult, Model model) {
 
         //유효성 검증 에러 발생시 회원가입 페이지로 이동시킴
         if (bindingResult.hasErrors()) return "auth/signUp";
 
         //유효성 검사를 통과했다면 회원가입 진행
         try {
-            //MemberFormDto -> Entity 객체로 변환
+            //UserFormDto -> Entity 객체로 변환
             Users user = Users.createUser(userFormDto, passwordEncoder);
 ;
             authService.saveUser(user);
         } catch (IllegalStateException e) {
             model.addAttribute("errorMessage", e.getMessage());
+
             return "auth/signUp";
         }
 
@@ -57,7 +57,9 @@ public class AuthController {
     //로그인 실패시
     @GetMapping(value = "/auth/login/error")
     public String loginError(Model model) {
+
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해 주세요.");
+
         return "auth/signIn"; //로그인 페이지로 그대로 이동
     }
 }

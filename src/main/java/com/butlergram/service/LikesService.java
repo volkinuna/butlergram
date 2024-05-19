@@ -12,7 +12,7 @@ public class LikesService {
     private final LikesRepository likesRepository;
 
     //좋아요
-    @Transactional // DB에 영향을 주기때문에..
+    @Transactional
     public void likes(Long postId, Long principalId) {
         likesRepository.likes(postId, principalId);
     }
