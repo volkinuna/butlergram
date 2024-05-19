@@ -13,6 +13,7 @@
 </head>
 
 <main class="main" layout:fragment="content">
+    <input type="hidden" id="principalId" th:value="${#authentication.principal.id}">
     <section class="container">
         <!--전체 리스트 시작-->
         <article class="story-list" id="storyList">

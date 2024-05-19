@@ -100,7 +100,7 @@
 <div class="modal-info" onclick="modalInfo()">
     <div class="modal">
         <button th:onclick="'location.href=\'/user/' + ${#authentication.principal.id} + '/update\''">회원정보 변경</button>
-        <button onclick="location.href='/user/logout'">로그아웃</button>
+        <button onclick="location.href='/auth/logout'">로그아웃</button>
         <button onclick="closePopup('.modal-info')">취소</button>
     </div>
 </div>

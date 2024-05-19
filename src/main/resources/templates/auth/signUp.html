@@ -25,7 +25,7 @@
                     <!--로고 end-->
 
                     <!--회원가입 인풋-->
-                    <form class="login__input" action="/user/new" method="post" th:object="${userFormDto}">
+                    <form class="login__input" action="/auth/new" method="post" th:object="${userFormDto}">
                         <input type="text" name="username" placeholder="유저네임" maxlength="30" th:field="*{username}" />
                         <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="fieldError">Incorrect Data</p>
 

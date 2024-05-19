@@ -10,6 +10,7 @@ import org.qlrm.mapper.JpaResultMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,11 +23,11 @@ public class SubscribeService {
     @Transactional(readOnly = true)
     public List<SubscribeDto> subscribeList(Long principalId, Long userId) {
         StringBuffer sb = new StringBuffer();
-        sb.append("SELECT u.id, u.user_name, u.profile_image_url, ");
-        sb.append("if((SELECT 1 FROM subscribe WHERE from_user_id = ? AND to_user_id = u.id), 1, 0) subscribeState, ");
-        sb.append("if((?=u.id), 1, 0) equal_user_state ");
+        sb.append("SELECT u.user_id, u.username, u.profile_image_url, ");
+        sb.append("IF((SELECT 1 FROM subscribe WHERE from_user_id = ? AND to_user_id = u.user_id), 1, 0) subscribeState, ");
+        sb.append("IF((? = u.user_id), 1, 0) equalUserState ");
         sb.append("FROM user u INNER JOIN subscribe s ");
-        sb.append("ON u.id = s.to_user_id ");
+        sb.append("ON u.user_id = s.to_user_id ");
         sb.append("WHERE s.from_user_id = ?");
 
         Query query = em.createNativeQuery(sb.toString())
@@ -35,15 +36,22 @@ public class SubscribeService {
                 .setParameter(3, userId);
 
         List<Object[]> results = query.getResultList();
-        List<SubscribeDto> subscribeDtos = mapResultsToDto(results);
-        return subscribeDtos;
+        return mapResultsToDto(results);
     }
 
     private List<SubscribeDto> mapResultsToDto(List<Object[]> results) {
+        List<SubscribeDto> subscribeDtos = new ArrayList<>();
         for (Object[] result : results) {
-            System.out.println(result);
+            Long id = ((Number) result[0]).longValue();
+            String userName = (String) result[1];
+            String profileImageUrl = (String) result[2];
+            boolean subscribeState = ((Number) result[3]).intValue() == 1;
+            boolean equalUserState = ((Number) result[4]).intValue() == 1;
+
+            SubscribeDto subscribeDto = new SubscribeDto(id, userName, profileImageUrl, subscribeState, equalUserState);
+            subscribeDtos.add(subscribeDto);
         }
-        return null;
+        return subscribeDtos;
     }
 
     @Transactional

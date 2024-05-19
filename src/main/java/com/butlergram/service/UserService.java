@@ -1,7 +1,6 @@
 package com.butlergram.service;
 
 import com.butlergram.dto.UserProfileDto;
-import com.butlergram.dto.UserUpdateDto;
 import com.butlergram.entity.Users;
 import com.butlergram.repository.SubscribeRepository;
 import com.butlergram.repository.UserRepository;
@@ -37,6 +36,7 @@ public class UserService {
         String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
 
         Path imageFilePath = Paths.get(imgLocation+imageFileName);
+        System.out.println(imageFilePath);
 
         try {
             Files.write(imageFilePath, profileImageFile.getBytes());
@@ -88,11 +88,6 @@ public class UserService {
         Users userEntity = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
         userEntity.setName(users.getName());
-
-        String rawPassword = users.getPassword();
-        String encPassword = passwordEncoder.encode(rawPassword);
-        userEntity.setPassword(encPassword);
-
         userEntity.setBio(users.getBio());
         userEntity.setPhone(users.getPhone());
         userEntity.setGender(users.getGender());

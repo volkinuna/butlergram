@@ -18,7 +18,7 @@
                     <h1><img src="/images/logo.jpg" alt="로고"></h1>
 
                     <!--로그인 인풋-->
-                    <form class="login__input" action="/user/login" method="post">
+                    <form class="login__input" action="/auth/login" method="post">
                         <input type="text" name="username" placeholder="유저네임" />
                         <input type="password" name="password" placeholder="비밀번호" />
 
@@ -51,7 +51,7 @@
                 <!--계정이 없으신가요?-->
                 <div class="login__register">
                     <span>계정이 없으신가요?</span>
-                    <a th:href="@{/user/new}">가입하기</a>
+                    <a th:href="@{/auth/new}">가입하기</a>
                 </div>
                 <!--계정이 없으신가요? end-->
             </article>

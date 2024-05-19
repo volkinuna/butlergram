@@ -47,7 +47,7 @@ public class Users extends BaseEntity {
     private String role; //권한
 
     @JsonIgnore
-    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     //UserFormDto -> User 엔티티 객체로 변환

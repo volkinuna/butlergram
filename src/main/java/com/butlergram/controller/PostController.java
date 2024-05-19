@@ -6,6 +6,8 @@ import com.butlergram.entity.Post;
 import com.butlergram.exception.CustomException;
 import com.butlergram.service.PostService;
 import com.butlergram.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +27,6 @@ public class PostController {
 
     private final PostService postService;
     private final UserService userService;
-
-    @GetMapping({"/", "/post/story"})
-    public String story() {
-        return "post/story";
-    }
 
     // API 구현하다면 이유 - 브라우저에서 요청하는게 아니라, 안드로이드나 IOS 요청시..(데이터를 줘야지 html파일을 줄 순 없으니깐..)
     @GetMapping("/post/popular")

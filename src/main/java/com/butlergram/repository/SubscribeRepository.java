@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface SubscribeRepository extends JpaRepository<Subscribe, Long> {
 
     @Modifying
-    @Query(value = "INSERT INTO subscribe(from_user_id, to_user_id, createDate) VALUES(:from_user_id, :to_user_id, now())", nativeQuery = true)
+    @Query(value = "INSERT INTO subscribe(from_user_id, to_user_id) VALUES(:from_user_id, :to_user_id)", nativeQuery = true)
     void subscribe(@Param("from_user_id") Long fromUserId, @Param("to_user_id") Long toUserId); //구독
 
     @Modifying

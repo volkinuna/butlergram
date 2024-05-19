@@ -21,7 +21,7 @@ public class SecurityConfig {
         httpSecurity.authorizeHttpRequests(authorize -> authorize
                         //모든 사용자가 로그인(인증)없이 접근할 수 있도록 설정
                         .requestMatchers("/css/**", "/js/**", "/img/**", "/images/**", "/fonts/**", "/upload/**").permitAll()
-                        .requestMatchers("/", "/user/**", "/story/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/favicon.ico", "/error").permitAll()
                         //관리자만 접근가능하도록 설정(인가)
                         .requestMatchers("/admin/**").hasRole("ADMIN")
@@ -30,15 +30,15 @@ public class SecurityConfig {
                 )
                 //2. 로그인에 관한 설정
                 .formLogin(formLogin -> formLogin
-                        .loginPage("/user/login")
+                        .loginPage("/auth/login")
                         .defaultSuccessUrl("/")
                         .usernameParameter("username")
-                        .failureUrl("/user/login/error")
+                        .failureUrl("/auth/login/error")
                 )
                 //3. 로그아웃에 관한 설정
                 .logout(logout -> logout
-                        .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
-                        .logoutSuccessUrl("/user/login")
+                        .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                        .logoutSuccessUrl("/auth/login")
                 )
                 //4. 인증되지 않은 사용자가 리소스에 접근시 설정
                 .exceptionHandling(handling -> handling

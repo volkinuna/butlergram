@@ -8,6 +8,8 @@ import com.butlergram.entity.Users;
 import com.butlergram.service.AuthService;
 import com.butlergram.service.SubscribeService;
 import com.butlergram.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,10 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
@@ -33,15 +32,20 @@ public class UserController {
     private final SubscribeService subscribeService;
 
     @GetMapping("/user/{userId}")
-    public String profile(@PathVariable(value = "userId") Long userId, Model model, Principal principal) {
+    public String profile(HttpServletRequest request, @PathVariable(value = "userId") Long userId, Model model, Principal principal) {
+        Object httpStatus = request.getAttribute("HttpStatus");
+        if (httpStatus != null && (int) httpStatus == HttpServletResponse.SC_UNAUTHORIZED)
+            return "/auth/login";
+
         UserProfileDto userProfileDto = userService.profile(userId, userService.findByUsername(principal.getName()).getId());
         model.addAttribute("userProfileDto", userProfileDto);
         return "users/profile";
     }
 
     @PutMapping("/user/{principalId}/profileImageUrl")
-    public ResponseEntity<?> profileImageUrlUpdate(@PathVariable("principalId") Long principalId, MultipartFile profileImageFile,
+    public ResponseEntity<?> profileImageUrlUpdate(@PathVariable("principalId") Long principalId, @RequestParam("profileImageFile") MultipartFile profileImageFile,
                                                    Principal principal){
+        System.out.println("hey");
         Users userEntity = userService.profileImageUpdate(principalId, profileImageFile);
         //principal.setUser(userEntity); // 세션 변경
         return new ResponseEntity<>(new CMRespDto<>(1, "프로필사진 변경완료", null), HttpStatus.OK);

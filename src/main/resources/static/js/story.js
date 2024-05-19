@@ -44,14 +44,21 @@ function getStoryItem(post) {
 	let item = `<div class="story-list__item">
 	<div class="sl__item__header">
 		<div>
-			<img class="profile-image" src="${profileImageUrl}"/>
+			<a href="/user/${post.users.id}"><img class="profile-image" src="${profileImageUrl}"/></a>
 		</div>
 		<div class="story_between">
-		    <div>${post.users.username}</div>
-		    <div>
+		    <div><a href="/user/${post.users.id}">${post.users.username}</a></div>`
+
+	if (principalId == post.users.id) {
+	    item +=
+		    `<div>
 		        <button onclick="deletePost(${post.id})"><i class="fas fa-times"></i></button>
-		    </div>
-		</div>
+		    </div>`
+	}
+
+
+	item +=
+		`</div>
 	</div>
 
 	<div class="sl__item__img">
@@ -145,18 +152,8 @@ function deletePost(postId) {
 		dataType : "json",
 		cache : false,
 		success : function(result, status) {
-			var path = location.pathname;
-
-			//페이지 번호만 가져온다.
-			var page = path.substring(path.lastIndexOf("/") + 1);
-
-			//사이트 new 메뉴를 클릭하고 들어왔을때를 대비
-			if (page == 'post') {
-			    page = 0;
-			}
-
 			//주문 취소 후에 원래 페이지로 이동 시켜준다.
-			location.href = '/post/' + page;
+			location.href = '/';
 		},
 		error : function(jqXHR, status, error) {
 			if(jqXHR.status == '401') {
@@ -165,6 +162,7 @@ function deletePost(postId) {
             } else {
                 alert(jqXHR.responseText);
             }
+        }
     });
 }
 

@@ -20,20 +20,20 @@ public class AuthController {
     private final AuthService authService;
 
     //로그인 화면
-    @GetMapping(value = "/user/login") //localhost/user/login
+    @GetMapping(value = "/auth/login") //localhost/user/login
     public String loginUser() {
         return "auth/signIn";
     }
 
     //회원가입 화면
-    @GetMapping(value = "/user/new") //localhost/user/new
+    @GetMapping(value = "/auth/new") //localhost/user/new
     public String userForm(Model model) {
         model.addAttribute("userFormDto", new UserFormDto());
         return "auth/signUp";
     }
 
     //실제 회원가입 처리
-    @PostMapping(value = "/user/new")
+    @PostMapping(value = "/auth/new")
     public String userForm(@Valid UserFormDto userFormDto,
                              BindingResult bindingResult, Model model) {
 
@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     //로그인 실패시
-    @GetMapping(value = "/user/login/error")
+    @GetMapping(value = "/auth/login/error")
     public String loginError(Model model) {
         model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해 주세요.");
         return "auth/signIn"; //로그인 페이지로 그대로 이동
